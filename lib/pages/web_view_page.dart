@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -13,10 +12,29 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  String? name;
+
+  // 生命周期 build执行之前会执行
+  @override
+  void initState() {
+    super.initState();
+
+    // build 执行之后会执行的回调
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // 获取路由参数
+      var map = ModalRoute.of(context)?.settings.arguments;
+      if (map is Map) {
+        name = map['name'];
+        // 刷新页面
+        setState(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
+        appBar: AppBar(title: Text(name ?? "")),
         body: SafeArea(
             child: Container(
                 child: InkWell(
